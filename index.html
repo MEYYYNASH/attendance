@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SETEC Student Attendance Management System</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN for Interactive Visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <!-- SETEC SVG Logo - Crafted matching the real crest -->
+                <svg class="setec-logo" viewBox="0 0 200 250" width="80" height="100">
+                    <defs>
+                        <clipPath id="clip-left">
+                            <rect x="0" y="0" width="100" height="300" />
+                        </clipPath>
+                        <clipPath id="clip-right">
+                            <rect x="100" y="0" width="100" height="300" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Shield Background Left Half (White) -->
+                    <path d="M 100 10 L 40 10 L 40 130 Q 40 180 100 210 Z" fill="#ffffff" />
+                    <!-- Shield Background Right Half (Green) -->
+                    <path d="M 100 10 L 160 10 L 160 130 Q 160 180 100 210 Z" fill="#00a859" />
+                    <!-- Shield Green Outline -->
+                    <path d="M 100 10 L 40 10 L 40 130 Q 40 180 100 210 Q 160 180 160 130 L 160 10 Z" fill="none" stroke="#00a859" stroke-width="4" />
+                    
+                    <!-- SETEC Text (Clipped for colors) -->
+                    <!-- S, E and left of T are green -->
+                    <g clip-path="url(#clip-left)">
+                        <text x="100" y="105" font-family="'Outfit', 'Arial Black', sans-serif" font-weight="900" font-size="52" text-anchor="middle" fill="#00a859">SETEC</text>
+                    </g>
+                    <!-- right of T, E, C are white -->
+                    <g clip-path="url(#clip-right)">
+                        <text x="100" y="105" font-family="'Outfit', 'Arial Black', sans-serif" font-weight="900" font-size="52" text-anchor="middle" fill="#ffffff">SETEC</text>
+                    </g>
+                    
+                    <!-- Ribbon Wing Fold Connectors (Dark Shadows) -->
+                    <path d="M 40 185 L 42 205 L 32 205 Z" fill="#00773f" />
+                    <path d="M 160 185 L 158 205 L 168 205 Z" fill="#00773f" />
+                    
+                    <!-- Ribbon Side Wings -->
+                    <!-- Left Wing -->
+                    <path d="M 40 185 L 32 205 C 20 215, 10 210, 5 225 C 15 225, 28 220, 30 205 Z" fill="#00a859" />
+                    <!-- Right Wing -->
+                    <path d="M 160 185 L 168 205 C 180 215, 190 210, 195 225 C 185 225, 172 220, 170 205 Z" fill="#00a859" />
+                    
+                    <!-- Ribbon Main Central Arc -->
+                    <path d="M 38 185 C 70 220, 130 220, 162 185 L 168 205 C 130 245, 70 245, 32 205 Z" fill="#00a859" />
+                    
+                    <!-- Text Path for Ribbon Banner -->
+                    <path id="ribbon-text-path" d="M 34 200 C 68 232, 132 232, 166 200" fill="none" stroke="none" />
+                    <text font-size="9" font-family="'Outfit', 'Arial', sans-serif" font-weight="800" letter-spacing="0.5">
+                        <textPath href="#ribbon-text-path" startOffset="50%" text-anchor="middle" fill="#ffffff">EXCELLENT TERTIARY EDUCATION</textPath>
+                    </text>
+                </svg>
+                <div class="brand-text">
+                    <h1>SETEC</h1>
+                    <p>Institute</p>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="#dashboard" class="menu-item active" id="btn-nav-dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#students" class="menu-item" id="btn-nav-students">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Students</span>
+                </a>
+                <a href="#attendance" class="menu-item" id="btn-nav-attendance">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Mark Attendance</span>
+                </a>
+                <a href="#reports" class="menu-item" id="btn-nav-reports">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>Monthly Report</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="system-time">
+                    <span id="current-time">00:00:00 AM</span>
+                    <span id="current-date">Tuesday, July 14, 2026</span>
+                </div>
+                <div class="theme-switch-container">
+                    <i class="fa-solid fa-moon"></i>
+                    <span>Dark Theme</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <button class="sidebar-toggle" id="btn-sidebar-toggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h2 class="page-title" id="page-title">Dashboard</h2>
+                </div>
+                <div class="navbar-right">
+                    <button class="btn btn-secondary" id="btn-import-students">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span>Import</span>
+                    </button>
+                    <button class="btn btn-secondary" id="btn-export-attendance">
+                        <i class="fa-solid fa-file-export"></i>
+                        <span>Export CSV</span>
+                    </button>
+                    <button class="btn btn-primary" id="btn-print-report">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Print Report</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="content-view active-view">
+                <!-- Stats Summary -->
+                <div class="stats-grid">
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-blue-glow">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Total Students</h3>
+                            <span class="stat-value" id="stat-total-students">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-green-glow">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Present Today</h3>
+                            <span class="stat-value text-green" id="stat-present-today">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-red-glow">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Absent Today</h3>
+                            <span class="stat-value text-red" id="stat-absent-today">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-yellow-glow">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Late Today</h3>
+                            <span class="stat-value text-yellow" id="stat-late-today">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-cyan-glow">
+                            <i class="fa-solid fa-envelope-open-text"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Excused / Leave</h3>
+                            <span class="stat-value text-cyan" id="stat-excused-today">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card accent-card">
+                        <div class="stat-icon bg-purple-glow">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Attendance Rate</h3>
+                            <span class="stat-value text-glow" id="stat-attendance-rate">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Lists -->
+                <div class="dashboard-grid">
+                    <!-- Chart Panel 1 -->
+                    <div class="glass-card chart-container">
+                        <div class="card-header">
+                            <h4>Today's Attendance Status</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="today-attendance-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Panel 2 -->
+                    <div class="glass-card chart-container">
+                        <div class="card-header">
+                            <h4>Weekly Attendance Trend</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="weekly-trend-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="glass-card recent-list-card">
+                    <div class="card-header">
+                        <h4>Group Overview (Attendance Today)</h4>
+                        <div class="header-actions">
+                            <span class="badge badge-pulse" id="live-indicator">● LIVE</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="table-class-overview">
+                            <thead>
+                                <tr>
+                                    <th>Group</th>
+                                    <th>Total Students</th>
+                                    <th>Present</th>
+                                    <th>Absent</th>
+                                    <th>Late</th>
+                                    <th>Excused/Leave</th>
+                                    <th>Performance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Loaded dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Student Management View -->
+            <section id="view-students" class="content-view">
+                <div class="table-controls glass-card">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="student-search-input" placeholder="Search by student name, ID or group...">
+                    </div>
+                    <div class="filter-group">
+                        <select id="student-class-filter" class="glass-select">
+                            <option value="all">All Groups</option>
+                            <!-- Classes loaded dynamically -->
+                        </select>
+                        <button class="btn btn-primary" id="btn-add-student">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Add Student</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="table-responsive">
+                        <table class="data-table" id="table-students-list">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Group</th>
+                                    <th>Gender</th>
+                                    <th>Contact No</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-pagination">
+                        <span id="pagination-info">Showing 0 to 0 of 0 students</span>
+                        <div class="pagination-buttons">
+                            <button class="btn btn-sm btn-secondary" id="btn-prev-page" disabled><i class="fa-solid fa-chevron-left"></i></button>
+                            <button class="btn btn-sm btn-secondary" id="btn-next-page" disabled><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Attendance Marker View -->
+            <section id="view-attendance" class="content-view">
+                <div class="attendance-header-controls glass-card">
+                    <div class="date-selector">
+                        <label for="attendance-date">Select Date:</label>
+                        <input type="date" id="attendance-date" class="glass-date-input">
+                    </div>
+                    <div class="class-selector">
+                        <label for="attendance-class-select">Group:</label>
+                        <select id="attendance-class-select" class="glass-select">
+                            <!-- Classes loaded dynamically -->
+                        </select>
+                    </div>
+                    <div class="quick-mark-actions">
+                        <button class="btn btn-success-outline" id="btn-mark-all-present">
+                            <i class="fa-solid fa-circle-check"></i> All Present
+                        </button>
+                        <button class="btn btn-danger-outline" id="btn-mark-all-absent">
+                            <i class="fa-solid fa-circle-xmark"></i> All Absent
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Attendance Mark Grid -->
+                <div class="glass-card">
+                    <div class="marker-search-bar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="marker-search-input" placeholder="Quick filter by student name or ID...">
+                        </div>
+                        <div class="attendance-summary-banner">
+                            <span class="summary-item">Present: <strong class="text-green" id="mark-summary-present">0</strong></span>
+                            <span class="summary-item">Absent: <strong class="text-red" id="mark-summary-absent">0</strong></span>
+                            <span class="summary-item">Late: <strong class="text-yellow" id="mark-summary-late">0</strong></span>
+                            <span class="summary-item">Excused: <strong class="text-blue" id="mark-summary-excused">0</strong></span>
+                            <span class="summary-item">Leave: <strong class="text-purple" id="mark-summary-leave">0</strong></span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="table-attendance-marker">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student Name</th>
+                                    <th>Group</th>
+                                    <th>Gender</th>
+                                    <th class="text-center">Attendance Status</th>
+                                    <th>Notes / Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="attendance-footer-actions">
+                        <button class="btn btn-primary btn-lg" id="btn-save-attendance">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Attendance Records
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly Report View -->
+            <section id="view-reports" class="content-view">
+                <div class="report-controls glass-card">
+                    <div class="report-params">
+                        <div class="param-item">
+                            <label for="report-month-select">Month:</label>
+                            <input type="month" id="report-month-select" class="glass-month-input">
+                        </div>
+                        <div class="param-item">
+                            <label for="report-class-select">Group:</label>
+                            <select id="report-class-select" class="glass-select">
+                                <option value="all">All Groups</option>
+                                <!-- Classes loaded dynamically -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn btn-secondary" id="btn-refresh-report">
+                            <i class="fa-solid fa-rotate"></i> Reload
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card report-card">
+                    <div class="report-header-printable">
+                        <div class="report-logo">
+                            <!-- Duplicate SETEC Logo for Print Layout -->
+                            <svg viewBox="0 0 200 210" width="60" height="63">
+                                <path d="M 100 10 L 40 10 L 40 130 Q 40 180 100 210 Z" fill="#ffffff" />
+                                <path d="M 100 10 L 160 10 L 160 130 Q 160 180 100 210 Z" fill="#00a859" />
+                                <path d="M 100 10 L 40 10 L 40 130 Q 40 180 100 210 Q 160 180 160 130 L 160 10 Z" fill="none" stroke="#00a859" stroke-width="4" />
+                                <g clip-path="url(#clip-left)">
+                                    <text x="100" y="105" font-family="'Outfit', sans-serif" font-weight="900" font-size="52" text-anchor="middle" fill="#00a859">SETEC</text>
+                                </g>
+                                <g clip-path="url(#clip-right)">
+                                    <text x="100" y="105" font-family="'Outfit', sans-serif" font-weight="900" font-size="52" text-anchor="middle" fill="#ffffff">SETEC</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="report-title-block">
+                            <h3>SETEC Institute</h3>
+                            <h4>Student Monthly Attendance Report</h4>
+                            <p>Group: <span id="print-class-name">All Groups</span> | Month: <span id="print-month-name">July 2026</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive table-scroll-x">
+                        <table class="report-grid-table" id="table-monthly-report">
+                            <thead>
+                                <!-- Generated Dynamically -->
+                            </thead>
+                            <tbody>
+                                <!-- Generated Dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="report-legend">
+                        <span class="legend-item"><span class="lg-box lg-p">P</span> Present</span>
+                        <span class="legend-item"><span class="lg-box lg-a">A</span> Absent</span>
+                        <span class="legend-item"><span class="lg-box lg-l">L</span> Late</span>
+                        <span class="legend-item"><span class="lg-box lg-e">E</span> Excused</span>
+                        <span class="legend-item"><span class="lg-box lg-lv">LV</span> Leave</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add/Edit Student Modal -->
+    <div class="modal" id="student-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Student</h3>
+                <button class="modal-close" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="student-form">
+                <input type="hidden" id="form-student-id-original">
+                <div class="form-group">
+                    <label for="form-student-id">Student ID / Roll No <span class="required">*</span></label>
+                    <input type="text" id="form-student-id" placeholder="e.g. STU1001" required class="glass-input">
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="form-student-name">Full Name <span class="required">*</span></label>
+                        <input type="text" id="form-student-name" placeholder="e.g. Student Name" required class="glass-input">
+                    </div>
+                    <div class="form-group flex-sm-1">
+                        <label for="form-student-gender">Gender <span class="required">*</span></label>
+                        <select id="form-student-gender" required class="glass-select">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="form-student-class">Group <span class="required">*</span></label>
+                        <input type="text" id="form-student-class" placeholder="e.g. SW40" required class="glass-input" list="classes-datalist">
+                        <datalist id="classes-datalist">
+                            <option value="SW40"></option>
+                        </datalist>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="form-student-phone">Contact Number</label>
+                        <input type="tel" id="form-student-phone" placeholder="e.g. +855 12 345 678" class="glass-input">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-student">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Import CSV Modal -->
+    <div class="modal" id="import-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>Import Students List</h3>
+                <button class="modal-close" id="btn-close-import-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="import-instructions">
+                    <p>You can import student lists using a CSV (Comma Separated Values) file. The CSV file must contain the following headers:</p>
+                    <div class="csv-headers-sample">
+                        <code>StudentID, Name, Group, Gender, ContactNo</code>
+                    </div>
+                    <p class="mt-2 text-sm text-dimmed">Example row: <code>STU2001, Sok Nareth, SW40, Female, +855 11 222 333</code></p>
+                </div>
+                <div class="drag-drop-area" id="csv-drag-drop">
+                    <i class="fa-solid fa-file-csv"></i>
+                    <p>Drag and drop your CSV file here, or <span class="highlight">browse files</span></p>
+                    <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
+                </div>
+                <div class="import-preview-section" id="import-preview-section" style="display: none;">
+                    <h4>File Preview (<span id="import-preview-count">0</span> records found)</h4>
+                    <div class="table-responsive max-h-200">
+                        <table class="data-table text-sm" id="table-import-preview">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Group</th>
+                                    <th>Gender</th>
+                                    <th>Contact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Preview rows here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btn-cancel-import-modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btn-confirm-import" disabled>Confirm Import</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Toast / Popup Alert Notification -->
+    <div id="toast-notification" class="toast">
+        <div class="toast-content">
+            <i class="fa-solid fa-circle-check toast-icon"></i>
+            <span class="toast-message" id="toast-message">Action successful!</span>
+        </div>
+    </div>
+
+    <!-- Script File -->
+    <script src="script.js"></script>
+</body>
+</html>
