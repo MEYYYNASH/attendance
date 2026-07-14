@@ -14,7 +14,7 @@ const STORAGE_KEYS = {
 
 let state = {
     students: [],
-    attendance: {}, // Structure: { "YYYY-MM-DD": { "StudentID": { status: "P"|"A"|"L"|"E"|"LV", remarks: "" } } }
+    attendance: {}, // Structure: { "YYYY-MM-DD": { "StudentID": { status: "P"|"A"|"L"|"E", remarks: "" } } }
     currentDate: '', // Format: YYYY-MM-DD
     activeView: 'dashboard',
     studentsPagination: {
@@ -290,7 +290,6 @@ function renderDashboard() {
     let absentCount = 0;
     let lateCount = 0;
     let excusedCount = 0;
-    let leaveCount = 0;
     let markedCount = 0;
     
     state.students.forEach(student => {
@@ -301,14 +300,13 @@ function renderDashboard() {
             else if (status === 'A') absentCount++;
             else if (status === 'L') lateCount++;
             else if (status === 'E') excusedCount++;
-            else if (status === 'LV') leaveCount++;
         }
     });
     
     document.getElementById('stat-present-today').textContent = presentCount;
     document.getElementById('stat-absent-today').textContent = absentCount;
     document.getElementById('stat-late-today').textContent = lateCount;
-    document.getElementById('stat-excused-today').textContent = excusedCount + leaveCount;
+    document.getElementById('stat-excused-today').textContent = excusedCount;
     
     // Attendance rate
     let rate = 0;
@@ -357,7 +355,7 @@ function renderClassOverviewTable() {
     
     Object.keys(classGroups).sort().forEach(className => {
         const list = classGroups[className];
-        let p = 0, a = 0, l = 0, e = 0, lv = 0;
+        let p = 0, a = 0, l = 0, e = 0;
         
         list.forEach(student => {
             const record = todayRecords[student.id];
@@ -366,12 +364,11 @@ function renderClassOverviewTable() {
                 else if (record.status === 'A') a++;
                 else if (record.status === 'L') l++;
                 else if (record.status === 'E') e++;
-                else if (record.status === 'LV') lv++;
             }
         });
         
         const total = list.length;
-        const marked = p + a + l + e + lv;
+        const marked = p + a + l + e;
         const perfPercent = marked > 0 ? Math.round(((p + l) / total) * 100) : 0;
         
         const tr = document.createElement('tr');
@@ -381,7 +378,7 @@ function renderClassOverviewTable() {
             <td class="text-green">${p}</td>
             <td class="text-red">${a}</td>
             <td class="text-yellow">${l}</td>
-            <td class="text-cyan">${e + lv}</td>
+            <td class="text-cyan">${e}</td>
             <td>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <div class="progress-bar-container" style="flex-grow:1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; width: 100px;">
@@ -406,7 +403,7 @@ function renderDashboardCharts() {
     
     // 1. TODAY'S ATTENDANCE STATUS (Donut Chart)
     const todayRecords = state.attendance[state.currentDate] || {};
-    let counts = { P: 0, A: 0, L: 0, E: 0, LV: 0, U: 0 };
+    let counts = { P: 0, A: 0, L: 0, E: 0, U: 0 };
     
     state.students.forEach(student => {
         if (todayRecords[student.id]) {
@@ -420,9 +417,9 @@ function renderDashboardCharts() {
     todayChart = new Chart(todayCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Present', 'Absent', 'Late', 'Excused/Leave', 'Unmarked'],
+            labels: ['Present', 'Absent', 'Late', 'Excused', 'Unmarked'],
             datasets: [{
-                data: [counts.P, counts.A, counts.L, counts.E + counts.LV, counts.U],
+                data: [counts.P, counts.A, counts.L, counts.E, counts.U],
                 backgroundColor: [
                     '#00e676', // Green
                     '#ff1744', // Red
@@ -757,7 +754,6 @@ function renderAttendanceMarker() {
                     <button class="status-btn ${activeStatus === 'A' ? 'active' : ''}" data-status="A" type="button">A</button>
                     <button class="status-btn ${activeStatus === 'L' ? 'active' : ''}" data-status="L" type="button">L</button>
                     <button class="status-btn ${activeStatus === 'E' ? 'active' : ''}" data-status="E" type="button">E</button>
-                    <button class="status-btn ${activeStatus === 'LV' ? 'active' : ''}" data-status="LV" type="button">LV</button>
                 </div>
             </td>
             <td>
@@ -802,7 +798,7 @@ function renderAttendanceMarker() {
 
 // Calculate marked counts live in the footer banner
 function updateMarkSummaryBanner() {
-    let p = 0, a = 0, l = 0, e = 0, lv = 0;
+    let p = 0, a = 0, l = 0, e = 0;
     
     document.querySelectorAll('#table-attendance-marker tbody tr').forEach(tr => {
         const activeBtn = tr.querySelector('.status-btn.active');
@@ -812,7 +808,6 @@ function updateMarkSummaryBanner() {
             else if (status === 'A') a++;
             else if (status === 'L') l++;
             else if (status === 'E') e++;
-            else if (status === 'LV') lv++;
         }
     });
     
@@ -820,7 +815,6 @@ function updateMarkSummaryBanner() {
     document.getElementById('mark-summary-absent').textContent = a;
     document.getElementById('mark-summary-late').textContent = l;
     document.getElementById('mark-summary-excused').textContent = e;
-    document.getElementById('mark-summary-leave').textContent = lv;
 }
 
 function saveAttendance() {
@@ -938,7 +932,7 @@ function renderMonthlyReport() {
             <th class="col-sticky-left" rowspan="2">Student Name</th>
             <th rowspan="2" style="font-size: 11px;">Class</th>
             <th colspan="${daysInMonth}">Days of Month</th>
-            <th colspan="5">Summary (Days)</th>
+            <th colspan="4">Summary (Days)</th>
             <th rowspan="2">%</th>
         </tr>
         <tr>
@@ -953,7 +947,6 @@ function renderMonthlyReport() {
             <th style="min-width: 24px; color: var(--status-absent); padding: 4px;">A</th>
             <th style="min-width: 24px; color: var(--status-late); padding: 4px;">L</th>
             <th style="min-width: 24px; color: var(--status-excused); padding: 4px;">E</th>
-            <th style="min-width: 24px; color: var(--status-leave); padding: 4px;">LV</th>
         </tr>
     `;
     
@@ -969,7 +962,7 @@ function renderMonthlyReport() {
     });
     
     if (filteredStudents.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${daysInMonth + 8}" class="text-center text-muted">No student records to display.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${daysInMonth + 7}" class="text-center text-muted">No student records to display.</td></tr>`;
         return;
     }
     
@@ -981,7 +974,7 @@ function renderMonthlyReport() {
                 <td><span style="font-size: 11px; white-space: nowrap;">${student.class.replace('Year ', 'Y')}</span></td>
         `;
         
-        let p = 0, a = 0, l = 0, e = 0, lv = 0;
+        let p = 0, a = 0, l = 0, e = 0;
         let totalMarked = 0;
         
         for (let day = 1; day <= daysInMonth; day++) {
@@ -996,7 +989,6 @@ function renderMonthlyReport() {
                 else if (s === 'A') { a++; rowHTML += `<td class="status-cell sc-a">A</td>`; }
                 else if (s === 'L') { l++; rowHTML += `<td class="status-cell sc-l">L</td>`; }
                 else if (s === 'E') { e++; rowHTML += `<td class="status-cell sc-e">E</td>`; }
-                else if (s === 'LV') { lv++; rowHTML += `<td class="status-cell sc-lv">LV</td>`; }
             } else {
                 rowHTML += `<td class="status-cell sc-empty">-</td>`;
             }
@@ -1011,7 +1003,6 @@ function renderMonthlyReport() {
             <td style="font-weight: 600; color: var(--status-absent);">${a}</td>
             <td style="font-weight: 600; color: var(--status-late);">${l}</td>
             <td style="font-weight: 600; color: var(--status-excused);">${e}</td>
-            <td style="font-weight: 600; color: var(--status-leave);">${lv}</td>
             <td style="font-weight: 800; color: ${percentColor};">${percent}%</td>
         </tr>
         `;
