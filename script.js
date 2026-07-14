@@ -80,10 +80,18 @@ function loadLocalStorageData() {
         rawStudents = null;
     }
     
-    // Clear attendance database to ensure NO mock history is preloaded (real reports, no auto setup)
-    if (!localStorage.getItem('setec_ams_attendance_reset_v4')) {
+    // Force one-time clear of students list cache to load the updated SW40 Sithy Riyadararith roster
+    if (!localStorage.getItem('setec_ams_students_reset_v5')) {
+        localStorage.removeItem(STORAGE_KEYS.STUDENTS);
         localStorage.removeItem(STORAGE_KEYS.ATTENDANCE);
-        localStorage.setItem('setec_ams_attendance_reset_v4', 'true');
+        localStorage.setItem('setec_ams_students_reset_v5', 'true');
+        rawStudents = null;
+    }
+    
+    // Clear attendance database to ensure NO mock history is preloaded (real reports, no auto setup)
+    if (!localStorage.getItem('setec_ams_attendance_reset_v5')) {
+        localStorage.removeItem(STORAGE_KEYS.ATTENDANCE);
+        localStorage.setItem('setec_ams_attendance_reset_v5', 'true');
     }
     
     // 1. Load Students

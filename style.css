@@ -1525,13 +1525,17 @@ input:checked + .slider:before {
         position: absolute;
         right: 16px;
         top: 24px;
-        background: none;
-        border: none;
-        color: var(--text-secondary);
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        color: var(--text-secondary) !important;
         font-size: 20px;
         cursor: pointer;
-        padding: 6px;
         z-index: 150;
+        appearance: none;
+        -webkit-appearance: none;
     }
     
     /* Mobile card view for group overview on dashboard */
