@@ -1381,6 +1381,10 @@ input:checked + .slider:before {
     }
 }
 
+.sidebar-close-btn {
+    display: none;
+}
+
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
     .dashboard-grid {
@@ -1513,6 +1517,140 @@ input:checked + .slider:before {
         position: static;
         display: block;
         margin-bottom: 8px;
+    }
+    
+    /* Mobile Close Button for Sidebar */
+    .sidebar-close-btn {
+        display: block;
+        position: absolute;
+        right: 16px;
+        top: 24px;
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 20px;
+        cursor: pointer;
+        padding: 6px;
+        z-index: 150;
+    }
+    
+    /* Mobile card view for group overview on dashboard */
+    #table-class-overview, 
+    #table-class-overview thead, 
+    #table-class-overview tbody, 
+    #table-class-overview th, 
+    #table-class-overview td, 
+    #table-class-overview tr { 
+        display: block; 
+    }
+    
+    #table-class-overview thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    #table-class-overview tr { 
+        border: 1px solid var(--border-color);
+        background: rgba(22, 28, 41, 0.4);
+        backdrop-filter: blur(10px);
+        margin-bottom: 16px;
+        border-radius: 16px;
+        padding: 16px;
+    }
+    
+    #table-class-overview td { 
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+        position: relative;
+        padding: 10px 0;
+        padding-left: 45%; 
+        text-align: left;
+        min-height: 40px;
+    }
+    
+    #table-class-overview td:last-child {
+        border-bottom: none;
+    }
+    
+    #table-class-overview td::before { 
+        position: absolute;
+        left: 6px;
+        width: 40%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+    
+    #table-class-overview td:nth-of-type(1)::before { content: "Group"; }
+    #table-class-overview td:nth-of-type(2)::before { content: "Total Students"; }
+    #table-class-overview td:nth-of-type(3)::before { content: "Present"; }
+    #table-class-overview td:nth-of-type(4)::before { content: "Absent"; }
+    #table-class-overview td:nth-of-type(5)::before { content: "Late"; }
+    #table-class-overview td:nth-of-type(6)::before { content: "Excused"; }
+    #table-class-overview td:nth-of-type(7)::before { content: "Performance"; }
+    
+    /* Mobile card view for student list directory */
+    #table-students-list, 
+    #table-students-list thead, 
+    #table-students-list tbody, 
+    #table-students-list th, 
+    #table-students-list td, 
+    #table-students-list tr { 
+        display: block; 
+    }
+    
+    #table-students-list thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    #table-students-list tr { 
+        border: 1px solid var(--border-color);
+        background: rgba(22, 28, 41, 0.4);
+        backdrop-filter: blur(10px);
+        margin-bottom: 16px;
+        border-radius: 16px;
+        padding: 16px;
+    }
+    
+    #table-students-list td { 
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+        position: relative;
+        padding: 10px 0;
+        padding-left: 35%; 
+        text-align: left;
+        min-height: 40px;
+    }
+    
+    #table-students-list td:last-child {
+        border-bottom: none;
+    }
+    
+    #table-students-list td::before { 
+        position: absolute;
+        left: 6px;
+        width: 30%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+    
+    #table-students-list td:nth-of-type(1)::before { content: "ID"; }
+    #table-students-list td:nth-of-type(2)::before { content: "Name"; }
+    #table-students-list td:nth-of-type(3)::before { content: "Group"; }
+    #table-students-list td:nth-of-type(4)::before { content: "Gender"; }
+    #table-students-list td:nth-of-type(5)::before { content: "Contact"; }
+    #table-students-list td:nth-of-type(6)::before { content: "Status"; }
+    #table-students-list td:nth-of-type(7)::before { content: "Actions"; }
+    
+    /* Report table momentum scrolling */
+    .table-scroll-x {
+        -webkit-overflow-scrolling: touch;
     }
 }
 

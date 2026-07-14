@@ -181,14 +181,33 @@ function setupNavigation() {
         }
     });
 
-    // Mobile Sidebar Toggle
+    // Mobile Sidebar Toggle & Close logic
     const toggleBtn = document.getElementById('btn-sidebar-toggle');
     const sidebar = document.querySelector('.sidebar');
+    const closeBtn = document.getElementById('btn-sidebar-close');
+    
     if (toggleBtn && sidebar) {
-        toggleBtn.addEventListener('click', () => {
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             sidebar.classList.toggle('open');
         });
     }
+    
+    if (closeBtn && sidebar) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.remove('open');
+        });
+    }
+    
+    // Click outside sidebar to close on mobile
+    document.addEventListener('click', (e) => {
+        if (sidebar && sidebar.classList.contains('open')) {
+            if (!sidebar.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        }
+    });
 }
 
 // Setup theme switcher
@@ -1202,20 +1221,15 @@ function setupEventListeners() {
     const addBtn = document.getElementById('btn-add-student');
     if (addBtn) addBtn.addEventListener('click', () => openStudentModal());
     
-    const importBtn = document.getElementById('btn-import-students');
-    if (importBtn) importBtn.addEventListener('click', () => openModal('import-modal'));
-    
-    const exportBtn = document.getElementById('btn-export-attendance');
-    if (exportBtn) exportBtn.addEventListener('click', exportToCSV);
-    
-    const printBtn = document.getElementById('btn-print-report');
-    if (printBtn) printBtn.addEventListener('click', () => window.print());
-    
     // 2. Modals Close
-    document.getElementById('btn-close-modal').addEventListener('click', () => closeModal('student-modal'));
-    document.getElementById('btn-cancel-modal').addEventListener('click', () => closeModal('student-modal'));
-    document.getElementById('btn-close-import-modal').addEventListener('click', () => closeModal('import-modal'));
-    document.getElementById('btn-cancel-import-modal').addEventListener('click', () => closeModal('import-modal'));
+    const closeBtnEl = document.getElementById('btn-close-modal');
+    if (closeBtnEl) closeBtnEl.addEventListener('click', () => closeModal('student-modal'));
+    const cancelBtnEl = document.getElementById('btn-cancel-modal');
+    if (cancelBtnEl) cancelBtnEl.addEventListener('click', () => closeModal('student-modal'));
+    const closeImportBtn = document.getElementById('btn-close-import-modal');
+    if (closeImportBtn) closeImportBtn.addEventListener('click', () => closeModal('import-modal'));
+    const cancelImportBtn = document.getElementById('btn-cancel-import-modal');
+    if (cancelImportBtn) cancelImportBtn.addEventListener('click', () => closeModal('import-modal'));
     
     // 3. Close modal on backdrop click
     document.querySelectorAll('.modal').forEach(m => {
