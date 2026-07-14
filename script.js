@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadLocalStorageData();
     setupNavigation();
     setupThemeToggle();
-    startClock();
     setupEventListeners();
     
     // Initial Render
@@ -68,22 +67,7 @@ function initializeDate() {
     if (monthPicker) monthPicker.value = `${yyyy}-${mm}`;
 }
 
-// Start live system time display
-function startClock() {
-    const timeEl = document.getElementById('current-time');
-    const dateEl = document.getElementById('current-date');
-    
-    function updateClock() {
-        const now = new Date();
-        timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        dateEl.textContent = now.toLocaleDateString('en-US', options);
-    }
-    
-    updateClock();
-    setInterval(updateClock, 1000);
-}
+
 
 // Load database from LocalStorage
 function loadLocalStorageData() {
