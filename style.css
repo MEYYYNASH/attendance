@@ -1831,6 +1831,8 @@ body.light-theme .icon-dark-theme {
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25) !important;
         display: flex !important;
         margin-bottom: 0 !important;
+        transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease, background-color 0.3s ease, border-color 0.3s ease !important;
+        will-change: transform, opacity !important;
     }
 
     .light-theme .dynamic-island-navbar {
@@ -1980,7 +1982,8 @@ body.light-theme .icon-dark-theme {
     z-index: 1000;
     justify-content: center;
     width: max-content;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease !important;
+    will-change: transform, opacity !important;
 }
 
 .mac-dock {
