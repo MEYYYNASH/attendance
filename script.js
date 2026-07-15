@@ -26,7 +26,7 @@ let state = {
 // Default Mock Data (Used if LocalStorage is empty)
 const MOCK_STUDENTS = [
     { id: 'STU1001', name: 'Sithy Riyadararith', class: 'SW40', gender: 'Male', contactNo: '+85512333444' },
-    { id: 'STU1002', name: 'Sthapor Pichpenhbormey', class: 'SW40', gender: 'Female', contactNo: '+85585555666' },
+    { id: 'STU1002', name: 'Sthapor Pichpenhbormey', class: 'SW40', gender: 'Male', contactNo: '+85585555666' },
     { id: 'STU1003', name: 'Sey Chanpiseth', class: 'SW40', gender: 'Male', contactNo: '+85593111222' },
     { id: 'STU1004', name: 'Sthapor Pichpenhvong', class: 'SW40', gender: 'Male', contactNo: '+85577987654' }
 ];
@@ -100,8 +100,11 @@ function loadLocalStorageData() {
     } else {
         // Populate clean SW40 students on first run
         state.students = [...MOCK_STUDENTS];
-        localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(state.students));
     }
+    
+    // Force all genders to Male (Automatic Migration)
+    state.students.forEach(s => s.gender = 'Male');
+    localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(state.students));
     
     // 2. Load Attendance
     const rawAttendance = localStorage.getItem(STORAGE_KEYS.ATTENDANCE);
