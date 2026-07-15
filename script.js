@@ -180,6 +180,11 @@ function setupNavigation() {
                 state.activeView = navItems[btnId];
                 renderActiveView();
                 
+                // Sync active state to Bottom Dock
+                document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
+                const activeDockItem = document.querySelector(`.dock-item[data-view="${state.activeView}"]`);
+                if (activeDockItem) activeDockItem.classList.add('active');
+                
                 // Close sidebar on mobile
                 const sidebar = document.querySelector('.sidebar');
                 if (sidebar.classList.contains('open')) {
@@ -187,6 +192,35 @@ function setupNavigation() {
                 }
             });
         }
+    });
+
+    // Setup mobile Mac OS Bottom Dock items
+    document.querySelectorAll('.dock-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const view = this.getAttribute('data-view');
+            state.activeView = view;
+            
+            // Sync active state in Bottom Dock
+            document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Sync active state in Sidebar
+            const sidebarNavItems = {
+                'dashboard': 'btn-nav-dashboard',
+                'students': 'btn-nav-students',
+                'attendance': 'btn-nav-attendance',
+                'reports': 'btn-nav-reports'
+            };
+            Object.values(sidebarNavItems).forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.classList.remove('active');
+            });
+            const activeSidebarBtn = document.getElementById(sidebarNavItems[view]);
+            if (activeSidebarBtn) activeSidebarBtn.classList.add('active');
+            
+            renderActiveView();
+        });
     });
 
     // Mobile Sidebar Toggle & Close logic
@@ -601,7 +635,7 @@ function renderStudentsList() {
             <td><strong>${student.name}</strong></td>
             <td>${student.class}</td>
             <td>${student.gender}</td>
-            <td>${student.contactNo ? `<a href="tel:${student.contactNo}" class="mobile-phone-link"><i class="fa-solid fa-phone"></i> ${student.contactNo}</a>` : '<span class="text-muted">N/A</span>'}</td>
+            <td>${student.contactNo || '<span class="text-muted">N/A</span>'}</td>
             <td><span class="badge badge-pulse" style="background: rgba(0, 168, 89, 0.08); color: var(--primary-color);">Active</span></td>
             <td>
                 <div style="display: flex; gap: 8px;">
@@ -736,14 +770,6 @@ function renderAttendanceMarker() {
         const activeStatus = record.status;
         const remarks = record.remarks;
         
-        const smsBody = encodeURIComponent(`Dear Parent, your child ${student.name} is ABSENT today, ${selectedDate}, from group SW40 at SETEC Institute.`);
-        const phoneActionsHTML = student.contactNo ? `
-            <div class="mobile-phone-actions">
-                <a href="tel:${student.contactNo}" class="btn-phone-call" title="Call Student"><i class="fa-solid fa-phone"></i></a>
-                <a href="sms:${student.contactNo}?body=${smsBody}" class="btn-phone-sms" title="Alert Absent Parent" style="display: ${activeStatus === 'A' ? 'inline-flex' : 'none'};"><i class="fa-solid fa-comment-sms"></i></a>
-            </div>
-        ` : '';
-        
         const tr = document.createElement('tr');
         tr.setAttribute('data-student-id', student.id);
         if (activeStatus) {
@@ -751,12 +777,7 @@ function renderAttendanceMarker() {
         }
         tr.innerHTML = `
             <td><code>${student.id}</code></td>
-            <td>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                    <strong>${student.name}</strong>
-                    ${phoneActionsHTML}
-                </div>
-            </td>
+            <td><strong>${student.name}</strong></td>
             <td>${student.class}</td>
             <td>${student.gender}</td>
             <td>
@@ -786,12 +807,6 @@ function renderAttendanceMarker() {
             const status = this.getAttribute('data-status');
             tr.className = tr.className.replace(/status-marked-\w+/g, '').trim();
             tr.classList.add(`status-marked-${status}`);
-            
-            // Show/Hide SMS parent alert button dynamically
-            const smsBtn = tr.querySelector('.btn-phone-sms');
-            if (smsBtn) {
-                smsBtn.style.display = status === 'A' ? 'inline-flex' : 'none';
-            }
             
             updateMarkSummaryBanner();
         });
@@ -879,11 +894,6 @@ function quickMarkAll(status) {
             tr.className = tr.className.replace(/status-marked-\w+/g, '').trim();
             tr.classList.add(`status-marked-${status}`);
             
-            // Update SMS parent alert button visibility
-            const smsBtn = tr.querySelector('.btn-phone-sms');
-            if (smsBtn) {
-                smsBtn.style.display = status === 'A' ? 'inline-flex' : 'none';
-            }
         }
     });
     updateMarkSummaryBanner();

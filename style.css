@@ -329,6 +329,8 @@ input:checked + .slider:before {
     flex-direction: column;
     gap: 24px;
     transition: margin-left var(--transition-normal);
+    min-width: 0;
+    overflow-x: hidden;
 }
 
 /* Top Navbar */
@@ -1365,6 +1367,7 @@ input:checked + .slider:before {
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
+    min-width: 0;
 }
 
 .content-view.active-view {
@@ -1372,6 +1375,12 @@ input:checked + .slider:before {
     flex-direction: column;
     gap: 24px;
     animation: viewFadeIn 0.4s forwards cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 0;
+}
+
+/* Desktop Hide Bottom Dock */
+.mac-dock-container {
+    display: none;
 }
 
 @keyframes viewFadeIn {
@@ -1656,6 +1665,98 @@ input:checked + .slider:before {
     .table-scroll-x {
         -webkit-overflow-scrolling: touch;
     }
+    
+    /* Mac OS Bottom Dock Mobile Rules */
+    .mac-dock-container {
+        display: flex;
+    }
+    
+    .sidebar {
+        display: none !important;
+    }
+    
+    .sidebar-toggle {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+        padding: 16px 16px 90px 16px !important;
+    }
+}
+
+/* Floating Mac OS Dock Menu Styles */
+.mac-dock-container {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: none; /* Controlled by media queries */
+    justify-content: center;
+    width: auto;
+    pointer-events: none;
+}
+
+.mac-dock {
+    pointer-events: auto;
+    background: rgba(20, 20, 30, 0.4) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 28px;
+    padding: 8px 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    transition: padding 0.3s ease;
+}
+
+.dock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    position: relative;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 0.2s ease;
+}
+
+.dock-item i {
+    font-size: 20px;
+    transition: font-size 0.2s ease, transform 0.2s ease;
+}
+
+.dock-item:hover, .dock-item:active {
+    transform: translateY(-8px) scale(1.15);
+    color: var(--primary-color);
+}
+
+.dock-item.active {
+    color: var(--primary-color) !important;
+    text-shadow: 0 0 10px rgba(0, 168, 89, 0.3);
+}
+
+.dock-dot {
+    position: absolute;
+    bottom: -2px;
+    width: 4px;
+    height: 4px;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dock-item.active .dock-dot {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 8px var(--primary-color);
 }
 
 @media (max-width: 480px) {
