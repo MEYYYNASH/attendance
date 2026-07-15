@@ -1692,7 +1692,6 @@ input:checked + .slider:before {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    display: none; /* Controlled by media queries */
     justify-content: center;
     width: auto;
     pointer-events: none;
