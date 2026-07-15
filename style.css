@@ -1861,3 +1861,52 @@ input:checked + .slider:before {
         overflow: visible !important;
     }
 }
+
+/* Background Glowing Blobs for Glassmorphism Depth */
+.glass-bg-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.14;
+    transition: opacity 0.5s ease;
+}
+
+.blob-green {
+    top: -15%;
+    right: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: #00a859;
+}
+
+.blob-purple {
+    bottom: -15%;
+    left: -5%;
+    width: 45vw;
+    height: 45vw;
+    background: #7c3aed;
+}
+
+.blob-blue {
+    top: 35%;
+    left: 20%;
+    width: 40vw;
+    height: 40vw;
+    background: #0284c7;
+}
+
+.light-theme .blob {
+    opacity: 0.22;
+    filter: blur(160px);
+}
