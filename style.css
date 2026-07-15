@@ -1695,6 +1695,50 @@ input:checked + .slider:before {
         margin-left: 0 !important;
         padding: 16px 16px 90px 16px !important;
     }
+    
+    /* Make the Attendance Marker Table extremely compact and fit in 1 horizontal line per row */
+    #table-attendance-marker {
+        font-size: 11px !important;
+    }
+    
+    #table-attendance-marker th,
+    #table-attendance-marker td {
+        padding: 6px 4px !important;
+    }
+    
+    #table-attendance-marker td code {
+        font-size: 10px !important;
+        padding: 1px 3px !important;
+    }
+    
+    #table-attendance-marker td strong {
+        font-size: 11px !important;
+        display: block;
+        max-width: 90px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    #table-attendance-marker .status-selector-group {
+        gap: 2px !important;
+    }
+    
+    #table-attendance-marker .btn-status {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 10px !important;
+        line-height: 24px !important;
+        padding: 0 !important;
+        border-radius: 6px !important;
+    }
+    
+    #table-attendance-marker .table-input-remarks {
+        width: 70px !important;
+        font-size: 10px !important;
+        padding: 3px 6px !important;
+        height: 24px !important;
+    }
 }
 
 /* Floating Mac OS Dock Menu Styles */
