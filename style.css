@@ -1980,6 +1980,7 @@ body.light-theme .icon-dark-theme {
     z-index: 1000;
     justify-content: center;
     width: max-content;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mac-dock {
@@ -2183,4 +2184,17 @@ body.light-theme .icon-dark-theme {
 .light-theme .blob {
     opacity: 0.22;
     filter: blur(160px);
+}
+
+/* Auto-Hide states for mobile navbar and Dock */
+.dynamic-island-navbar.island-hidden {
+    transform: translate(-50%, -70px) scale(0.9) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.mac-dock-container.dock-hidden {
+    transform: translate(-50%, 80px) scale(0.9) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }

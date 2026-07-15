@@ -1432,3 +1432,34 @@ function showToast(message, type = 'success') {
         toast.classList.remove('show');
     }, 3500);
 }
+
+// Auto-hide top Dynamic Island and bottom macOS Dock on mobile scroll down, auto-show on scroll up
+let lastScrollY = window.scrollY;
+const scrollThreshold = 8;
+
+window.addEventListener('scroll', () => {
+    if (window.innerWidth > 768) {
+        const topNav = document.querySelector('.dynamic-island-navbar');
+        const bottomDock = document.querySelector('.mac-dock-container');
+        if (topNav) topNav.classList.remove('island-hidden');
+        if (bottomDock) bottomDock.classList.remove('dock-hidden');
+        return;
+    }
+    
+    const currentScrollY = window.scrollY;
+    const topNav = document.querySelector('.dynamic-island-navbar');
+    const bottomDock = document.querySelector('.mac-dock-container');
+    
+    if (Math.abs(currentScrollY - lastScrollY) > scrollThreshold) {
+        if (currentScrollY > lastScrollY && currentScrollY > 60) {
+            // Scrolling Down: Hide navbar and Dock
+            if (topNav) topNav.classList.add('island-hidden');
+            if (bottomDock) bottomDock.classList.add('dock-hidden');
+        } else {
+            // Scrolling Up: Show navbar and Dock
+            if (topNav) topNav.classList.remove('island-hidden');
+            if (bottomDock) bottomDock.classList.remove('dock-hidden');
+        }
+        lastScrollY = currentScrollY;
+    }
+}, { passive: true });
