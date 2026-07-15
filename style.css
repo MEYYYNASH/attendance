@@ -335,7 +335,7 @@ input:checked + .slider:before {
 .main-content {
     flex-grow: 1;
     margin-left: var(--sidebar-width);
-    padding: 32px;
+    padding: 84px 32px 32px 32px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -345,41 +345,134 @@ input:checked + .slider:before {
     overflow-x: hidden;
 }
 
-/* Top Navbar */
-.top-navbar {
+/* Dynamic Island Navbar */
+.dynamic-island-navbar {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(800px, 90%);
+    height: 52px;
+    background: rgba(22, 28, 41, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    z-index: 1000;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    z-index: 10;
+    padding: 0 18px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.navbar-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+.light-theme .dynamic-island-navbar {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
 }
 
-.sidebar-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 20px;
-    cursor: pointer;
-    padding: 6px;
-}
-
-.page-title {
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
-
-.navbar-right {
+.island-left {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.island-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.island-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+}
+
+.island-title .brand-thin {
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.island-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.island-page-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-color);
+    background: rgba(0, 168, 89, 0.1);
+    padding: 4px 12px;
+    border-radius: 9999px;
+    letter-spacing: -0.1px;
+    white-space: nowrap;
+    border: 1px solid rgba(0, 168, 89, 0.15);
+}
+
+.island-right {
+    display: flex;
+    align-items: center;
+}
+
+.island-theme-toggle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.island-theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.light-theme .island-theme-toggle {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.light-theme .island-theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+body.dark-theme .icon-light-theme {
+    display: inline-block;
+}
+body.dark-theme .icon-dark-theme {
+    display: none;
+}
+body.light-theme .icon-light-theme {
+    display: none;
+}
+body.light-theme .icon-dark-theme {
+    display: inline-block;
+}
+
+.dynamic-island-navbar .sidebar-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    display: none;
 }
 
 /* ==========================================================================
@@ -1727,7 +1820,7 @@ input:checked + .slider:before {
     
     .main-content {
         margin-left: 0 !important;
-        padding: 16px 16px 90px 16px !important;
+        padding: 76px 16px 90px 16px !important;
     }
     
     /* Make the Attendance Marker Table extremely compact and fit in 1 horizontal line per row */

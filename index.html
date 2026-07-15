@@ -11,7 +11,7 @@
     <!-- Chart.js CDN for Interactive Visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=3.1">
+    <link rel="stylesheet" href="style.css?v=3.2">
 <body class="dark-theme">
     <!-- Glowing background blobs for glassmorphic depth -->
     <div class="glass-bg-blobs">
@@ -113,15 +113,39 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Top Navbar -->
-            <header class="top-navbar">
-                <div class="navbar-left">
+            <!-- Dynamic Island Navbar -->
+            <header class="dynamic-island-navbar">
+                <div class="island-left">
                     <button class="sidebar-toggle" id="btn-sidebar-toggle">
                         <i class="fa-solid fa-bars"></i>
                     </button>
-                    <h2 class="page-title" id="page-title">Dashboard</h2>
+                    <div class="island-brand">
+                        <svg viewBox="0 0 200 210" width="22" height="23" class="island-logo">
+                            <defs>
+                                <clipPath id="clip-left-mini"><rect x="0" y="0" width="100" height="210" /></clipPath>
+                                <clipPath id="clip-right-mini"><rect x="100" y="0" width="100" height="210" /></clipPath>
+                            </defs>
+                            <path d="M 100 10 L 40 10 L 40 130 Q 40 180 100 210 Z" fill="#ffffff" />
+                            <path d="M 100 10 L 160 10 L 160 130 Q 160 180 100 210 Z" fill="#00a859" />
+                            <path d="M 100 10 L 40 10 L 40 130 Q 40 180 100 210 Q 160 180 160 130 L 160 10 Z" fill="none" stroke="#00a859" stroke-width="4" />
+                            <g clip-path="url(#clip-left-mini)">
+                                <text x="100" y="105" font-family="'Outfit', sans-serif" font-weight="900" font-size="52" text-anchor="middle" fill="#00a859">SETEC</text>
+                            </g>
+                            <g clip-path="url(#clip-right-mini)">
+                                <text x="100" y="105" font-family="'Outfit', sans-serif" font-weight="900" font-size="52" text-anchor="middle" fill="#ffffff">SETEC</text>
+                            </g>
+                        </svg>
+                        <span class="island-title"><span class="brand-bold">SETEC</span> <span class="brand-thin">Institute</span></span>
+                    </div>
                 </div>
-                <div class="navbar-right">
+                <div class="island-center">
+                    <span class="island-page-title" id="page-title">Dashboard</span>
+                </div>
+                <div class="island-right">
+                    <button class="island-theme-toggle" id="island-theme-toggle" title="Toggle Theme">
+                        <i class="fa-solid fa-sun icon-light-theme"></i>
+                        <i class="fa-solid fa-moon icon-dark-theme"></i>
+                    </button>
                 </div>
             </header>
 
@@ -541,6 +565,6 @@
     </div>
 
     <!-- Script File -->
-    <script src="script.js?v=2.9"></script>
+    <script src="script.js?v=3.2"></script>
 </body>
 </html>

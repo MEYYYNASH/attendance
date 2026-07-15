@@ -233,36 +233,48 @@ function setupNavigation() {
 // Setup theme switcher
 function setupThemeToggle() {
     const toggle = document.getElementById('theme-toggle');
+    const islandToggle = document.getElementById('island-theme-toggle');
     const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
     
-    // Set initial
-    if (savedTheme === 'light') {
-        document.body.classList.remove('dark-theme');
-        document.body.classList.add('light-theme');
-        toggle.checked = false;
-    } else {
-        document.body.classList.add('dark-theme');
-        document.body.classList.remove('light-theme');
-        toggle.checked = true;
-    }
-    
-    toggle.addEventListener('change', () => {
-        if (toggle.checked) {
-            document.body.classList.add('dark-theme');
-            document.body.classList.remove('light-theme');
-            localStorage.setItem(STORAGE_KEYS.THEME, 'dark');
-            showToast('Switched to Dark Glassmorphism', 'info');
-        } else {
+    // Helper to apply theme and refresh charts
+    function applyTheme(theme) {
+        if (theme === 'light') {
             document.body.classList.remove('dark-theme');
             document.body.classList.add('light-theme');
+            if (toggle) toggle.checked = false;
             localStorage.setItem(STORAGE_KEYS.THEME, 'light');
-            showToast('Switched to Light Mode', 'info');
+        } else {
+            document.body.classList.add('dark-theme');
+            document.body.classList.remove('light-theme');
+            if (toggle) toggle.checked = true;
+            localStorage.setItem(STORAGE_KEYS.THEME, 'dark');
         }
+        
         // Redraw charts to update colors for light/dark gridlines
         if (state.activeView === 'dashboard') {
             renderDashboardCharts();
         }
-    });
+    }
+    
+    // Set initial
+    applyTheme(savedTheme);
+    
+    // Sidebar checkbox toggle
+    if (toggle) {
+        toggle.addEventListener('change', () => {
+            applyTheme(toggle.checked ? 'dark' : 'light');
+            showToast(toggle.checked ? 'Switched to Dark Glassmorphism' : 'Switched to Light Mode', 'info');
+        });
+    }
+    
+    // Dynamic Island toggle button
+    if (islandToggle) {
+        islandToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.contains('dark-theme');
+            applyTheme(isDark ? 'light' : 'dark');
+            showToast(isDark ? 'Switched to Light Mode' : 'Switched to Dark Glassmorphism', 'info');
+        });
+    }
 }
 
 function renderActiveView() {
