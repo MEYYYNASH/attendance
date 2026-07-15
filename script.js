@@ -155,101 +155,7 @@ function generateMockAttendanceHistory() {
 // 3. Navigation & Views Switching
 // ==========================================================================
 function setupNavigation() {
-    const navItems = {
-        'btn-nav-dashboard': 'dashboard',
-        'btn-nav-students': 'students',
-        'btn-nav-attendance': 'attendance',
-        'btn-nav-reports': 'reports'
-    };
-    
-    Object.keys(navItems).forEach(btnId => {
-        const btn = document.getElementById(btnId);
-        if (btn) {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Remove active classes
-                Object.keys(navItems).forEach(id => {
-                    document.getElementById(id).classList.remove('active');
-                });
-                
-                // Add active to current
-                btn.classList.add('active');
-                
-                // Switch view
-                state.activeView = navItems[btnId];
-                renderActiveView();
-                
-                // Sync active state to Bottom Dock
-                document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
-                const activeDockItem = document.querySelector(`.dock-item[data-view="${state.activeView}"]`);
-                if (activeDockItem) activeDockItem.classList.add('active');
-                
-                // Close sidebar on mobile
-                const sidebar = document.querySelector('.sidebar');
-                if (sidebar.classList.contains('open')) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        }
-    });
-
-    // Setup mobile Mac OS Bottom Dock items
-    document.querySelectorAll('.dock-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            const view = this.getAttribute('data-view');
-            state.activeView = view;
-            
-            // Sync active state in Bottom Dock
-            document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Sync active state in Sidebar
-            const sidebarNavItems = {
-                'dashboard': 'btn-nav-dashboard',
-                'students': 'btn-nav-students',
-                'attendance': 'btn-nav-attendance',
-                'reports': 'btn-nav-reports'
-            };
-            Object.values(sidebarNavItems).forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.classList.remove('active');
-            });
-            const activeSidebarBtn = document.getElementById(sidebarNavItems[view]);
-            if (activeSidebarBtn) activeSidebarBtn.classList.add('active');
-            
-            renderActiveView();
-        });
-    });
-
-    // Mobile Sidebar Toggle & Close logic
-    const toggleBtn = document.getElementById('btn-sidebar-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    const closeBtn = document.getElementById('btn-sidebar-close');
-    
-    if (toggleBtn && sidebar) {
-        toggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebar.classList.toggle('open');
-        });
-    }
-    
-    if (closeBtn && sidebar) {
-        closeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebar.classList.remove('open');
-        });
-    }
-    
-    // Click outside sidebar to close on mobile
-    document.addEventListener('click', (e) => {
-        if (sidebar && sidebar.classList.contains('open')) {
-            if (!sidebar.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
-                sidebar.classList.remove('open');
-            }
-        }
-    });
+    // Standard multi-page navigation is handled directly by browser href links.
 }
 
 // Setup theme switcher
@@ -288,35 +194,21 @@ function setupThemeToggle() {
 }
 
 function renderActiveView() {
-    // Hide all views
-    document.querySelectorAll('.content-view').forEach(view => {
-        view.classList.remove('active-view');
-    });
-    
-    // Show selected view
-    const viewId = `view-${state.activeView}`;
-    const activeViewEl = document.getElementById(viewId);
-    if (activeViewEl) {
-        activeViewEl.classList.add('active-view');
-    }
-    
-    // Update Header Page Title
-    const titleEl = document.getElementById('page-title');
-    if (titleEl) {
-        titleEl.textContent = state.activeView.charAt(0).toUpperCase() + state.activeView.slice(1);
-    }
-    
-    // View-specific initialization
-    if (state.activeView === 'dashboard') {
+    // Detect active view by searching for the active content-view element
+    if (document.getElementById('view-dashboard')) {
+        state.activeView = 'dashboard';
         renderDashboard();
-    } else if (state.activeView === 'students') {
+    } else if (document.getElementById('view-students')) {
+        state.activeView = 'students';
         state.studentsPagination.currentPage = 1;
         populateClassFilters();
         renderStudentsList();
-    } else if (state.activeView === 'attendance') {
+    } else if (document.getElementById('view-attendance')) {
+        state.activeView = 'attendance';
         populateAttendanceFilters();
         renderAttendanceMarker();
-    } else if (state.activeView === 'reports') {
+    } else if (document.getElementById('view-reports')) {
+        state.activeView = 'reports';
         populateReportFilters();
         renderMonthlyReport();
     }
@@ -1285,17 +1177,24 @@ function setupEventListeners() {
     }
     
     // 6. Pagination Navigation click
-    document.getElementById('btn-prev-page').addEventListener('click', () => {
-        if (state.studentsPagination.currentPage > 1) {
-            state.studentsPagination.currentPage--;
-            renderStudentsList();
-        }
-    });
+    // 6. Pagination Navigation click
+    const prevBtn = document.getElementById('btn-prev-page');
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (state.studentsPagination.currentPage > 1) {
+                state.studentsPagination.currentPage--;
+                renderStudentsList();
+            }
+        });
+    }
     
-    document.getElementById('btn-next-page').addEventListener('click', () => {
-        state.studentsPagination.currentPage++;
-        renderStudentsList();
-    });
+    const nextBtn = document.getElementById('btn-next-page');
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            state.studentsPagination.currentPage++;
+            renderStudentsList();
+        });
+    }
     
     // 7. Attendance Date & Class Change
     const attDate = document.getElementById('attendance-date');
@@ -1308,18 +1207,27 @@ function setupEventListeners() {
     if (markerSearch) markerSearch.addEventListener('input', renderAttendanceMarker);
     
     // 8. Attendance Mark Action
-    document.getElementById('btn-save-attendance').addEventListener('click', saveAttendance);
-    document.getElementById('btn-mark-all-present').addEventListener('click', () => quickMarkAll('P'));
-    document.getElementById('btn-mark-all-absent').addEventListener('click', () => quickMarkAll('A'));
+    const saveAttBtn = document.getElementById('btn-save-attendance');
+    if (saveAttBtn) saveAttBtn.addEventListener('click', saveAttendance);
+    const markPresBtn = document.getElementById('btn-mark-all-present');
+    if (markPresBtn) markPresBtn.addEventListener('click', () => quickMarkAll('P'));
+    const markAbsBtn = document.getElementById('btn-mark-all-absent');
+    if (markAbsBtn) markAbsBtn.addEventListener('click', () => quickMarkAll('A'));
     
     // 9. Report Reload
-    document.getElementById('btn-refresh-report').addEventListener('click', renderMonthlyReport);
-    document.getElementById('report-month-select').addEventListener('change', renderMonthlyReport);
-    document.getElementById('report-class-select').addEventListener('change', renderMonthlyReport);
+    const refreshRepBtn = document.getElementById('btn-refresh-report');
+    if (refreshRepBtn) refreshRepBtn.addEventListener('click', renderMonthlyReport);
+    const repMonthSelect = document.getElementById('report-month-select');
+    if (repMonthSelect) repMonthSelect.addEventListener('change', renderMonthlyReport);
+    const repClassSelect = document.getElementById('report-class-select');
+    if (repClassSelect) repClassSelect.addEventListener('change', renderMonthlyReport);
     
     // 10. CSV Import Drag-Drop confirmation
-    setupCSVImport();
-    document.getElementById('btn-confirm-import').addEventListener('click', confirmCSVImport);
+    const confirmImportBtn = document.getElementById('btn-confirm-import');
+    if (confirmImportBtn) {
+        setupCSVImport();
+        confirmImportBtn.addEventListener('click', confirmCSVImport);
+    }
 }
 
 function openModal(modalId) {
