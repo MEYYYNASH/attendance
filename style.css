@@ -23,6 +23,9 @@
     --text-secondary: #9aa4b7;
     --text-muted: #647087;
     
+    --bg-sticky-header: #111520;
+    --bg-sticky-cell: #161c29;
+    
     /* Status Colors & Glows */
     --status-present: #00e676;
     --status-present-glow: rgba(0, 230, 118, 0.25);
@@ -53,23 +56,26 @@
 
 /* Light Theme Variables */
 .light-theme {
-    --bg-base: #f3f4f6;
-    --bg-app: radial-gradient(circle at top right, #e2e8f0, #f3f4f6);
-    --bg-sidebar: rgba(255, 255, 255, 0.75);
-    --bg-card: rgba(255, 255, 255, 0.6);
-    --bg-card-hover: rgba(255, 255, 255, 0.85);
-    --border-color: rgba(0, 0, 0, 0.08);
+    --bg-base: #f8fafc;
+    --bg-app: radial-gradient(circle at 10% 20%, rgba(216, 241, 230, 0.45) 0.1%, rgba(233, 226, 246, 0.45) 90.1%);
+    --bg-sidebar: rgba(255, 255, 255, 0.55);
+    --bg-card: rgba(255, 255, 255, 0.45);
+    --bg-card-hover: rgba(255, 255, 255, 0.65);
+    --border-color: rgba(0, 0, 0, 0.06);
     --border-focus: rgba(0, 168, 89, 0.4);
     
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    --text-muted: #9ca3af;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
     
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.05);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,0.05);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.04);
     
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 168, 89, 0.03), 0 4px 12px 0 rgba(0, 0, 0, 0.02);
+    
+    --bg-sticky-header: #f1f5f9;
+    --bg-sticky-cell: #ffffff;
 }
 
 /* ==========================================================================
@@ -971,27 +977,27 @@ input:checked + .slider:before {
     position: sticky;
     left: 0;
     z-index: 5;
-    background: #161c29;
+    background: var(--bg-sticky-cell);
     text-align: left;
     min-width: 120px;
     font-weight: 500;
 }
 
 .light-theme .report-grid-table td.col-sticky-left {
-    background: #ffffff;
+    background: var(--bg-sticky-cell) !important;
 }
 
 .report-grid-table th.col-sticky-left {
     position: sticky;
     left: 0;
     z-index: 6;
-    background: #111520;
+    background: var(--bg-sticky-header);
     text-align: left;
     min-width: 120px;
 }
 
 .light-theme .report-grid-table th.col-sticky-left {
-    background: #f3f4f6;
+    background: var(--bg-sticky-header) !important;
 }
 
 .status-cell {
