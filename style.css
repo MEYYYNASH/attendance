@@ -1917,13 +1917,13 @@ body.light-theme .icon-dark-theme {
     /* Name Column */
     #table-attendance-marker th:nth-child(2),
     #table-attendance-marker td:nth-child(2) {
-        width: 80px !important;
+        width: 65px !important;
         text-align: left !important;
     }
     
     #table-attendance-marker td:nth-child(2) strong {
         display: block !important;
-        max-width: 80px !important;
+        max-width: 65px !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
         white-space: nowrap !important;
@@ -1947,7 +1947,8 @@ body.light-theme .icon-dark-theme {
     /* Status Column */
     #table-attendance-marker th:nth-child(5),
     #table-attendance-marker td:nth-child(5) {
-        width: 100px !important;
+        width: 115px !important;
+        overflow: visible !important;
     }
     
     #table-attendance-marker .status-selector-group {
