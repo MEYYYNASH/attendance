@@ -115,6 +115,14 @@ function loadLocalStorageData() {
         state.attendance = {};
         localStorage.setItem(STORAGE_KEYS.ATTENDANCE, JSON.stringify(state.attendance));
     }
+    
+    // 3. Load Active View State
+    const savedView = localStorage.getItem('setec_ams_active_view');
+    if (savedView) {
+        state.activeView = savedView;
+    } else {
+        state.activeView = 'dashboard';
+    }
 }
 
 // Save database to LocalStorage
@@ -170,23 +178,9 @@ function setupNavigation() {
         if (btn) {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                
-                // Remove active classes
-                Object.keys(navItems).forEach(id => {
-                    document.getElementById(id).classList.remove('active');
-                });
-                
-                // Add active to current
-                btn.classList.add('active');
-                
-                // Switch view
                 state.activeView = navItems[btnId];
+                localStorage.setItem('setec_ams_active_view', state.activeView);
                 renderActiveView();
-                
-                // Sync active state to Bottom Dock
-                document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
-                const activeDockItem = document.querySelector(`.dock-item[data-view="${state.activeView}"]`);
-                if (activeDockItem) activeDockItem.classList.add('active');
                 
                 // Close sidebar on mobile
                 const sidebar = document.querySelector('.sidebar');
@@ -201,27 +195,8 @@ function setupNavigation() {
     document.querySelectorAll('.dock-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
-            const view = this.getAttribute('data-view');
-            state.activeView = view;
-            
-            // Sync active state in Bottom Dock
-            document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Sync active state in Sidebar
-            const sidebarNavItems = {
-                'dashboard': 'btn-nav-dashboard',
-                'students': 'btn-nav-students',
-                'attendance': 'btn-nav-attendance',
-                'reports': 'btn-nav-reports'
-            };
-            Object.values(sidebarNavItems).forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.classList.remove('active');
-            });
-            const activeSidebarBtn = document.getElementById(sidebarNavItems[view]);
-            if (activeSidebarBtn) activeSidebarBtn.classList.add('active');
-            
+            state.activeView = this.getAttribute('data-view');
+            localStorage.setItem('setec_ams_active_view', state.activeView);
             renderActiveView();
         });
     });
@@ -309,6 +284,9 @@ function renderActiveView() {
         titleEl.textContent = state.activeView.charAt(0).toUpperCase() + state.activeView.slice(1);
     }
     
+    // Sync Navigation UI active states
+    syncNavigationUI();
+    
     // View-specific initialization
     if (state.activeView === 'dashboard') {
         renderDashboard();
@@ -323,6 +301,37 @@ function renderActiveView() {
         populateReportFilters();
         renderMonthlyReport();
     }
+}
+
+function syncNavigationUI() {
+    const navItems = {
+        'dashboard': 'btn-nav-dashboard',
+        'students': 'btn-nav-students',
+        'attendance': 'btn-nav-attendance',
+        'reports': 'btn-nav-reports'
+    };
+    
+    // Sync Sidebar
+    Object.keys(navItems).forEach(view => {
+        const btnId = navItems[view];
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            if (view === state.activeView) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+    });
+    
+    // Sync Bottom Dock
+    document.querySelectorAll('.dock-item').forEach(item => {
+        if (item.getAttribute('data-view') === state.activeView) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
 }
 
 // ==========================================================================
