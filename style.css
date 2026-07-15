@@ -1699,45 +1699,92 @@ input:checked + .slider:before {
     /* Make the Attendance Marker Table extremely compact and fit in 1 horizontal line per row */
     #table-attendance-marker {
         font-size: 11px !important;
+        width: 100% !important;
+        table-layout: fixed !important;
     }
     
     #table-attendance-marker th,
     #table-attendance-marker td {
-        padding: 6px 4px !important;
+        padding: 5px 2px !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    
+    /* ID Column */
+    #table-attendance-marker th:nth-child(1),
+    #table-attendance-marker td:nth-child(1) {
+        width: 45px !important;
+        font-size: 9px !important;
     }
     
     #table-attendance-marker td code {
-        font-size: 10px !important;
-        padding: 1px 3px !important;
+        font-size: 9px !important;
+        padding: 1px 2px !important;
     }
     
-    #table-attendance-marker td strong {
-        font-size: 11px !important;
-        display: block;
-        max-width: 90px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+    /* Name Column */
+    #table-attendance-marker th:nth-child(2),
+    #table-attendance-marker td:nth-child(2) {
+        width: 80px !important;
+        text-align: left !important;
+    }
+    
+    #table-attendance-marker td:nth-child(2) strong {
+        display: block !important;
+        max-width: 80px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        font-size: 10px !important;
+    }
+    
+    /* Group Column */
+    #table-attendance-marker th:nth-child(3),
+    #table-attendance-marker td:nth-child(3) {
+        width: 35px !important;
+        font-size: 10px !important;
+    }
+    
+    /* Gender Column */
+    #table-attendance-marker th:nth-child(4),
+    #table-attendance-marker td:nth-child(4) {
+        width: 35px !important;
+        font-size: 10px !important;
+    }
+    
+    /* Status Column */
+    #table-attendance-marker th:nth-child(5),
+    #table-attendance-marker td:nth-child(5) {
+        width: 100px !important;
     }
     
     #table-attendance-marker .status-selector-group {
-        gap: 2px !important;
+        gap: 1px !important;
+        justify-content: center !important;
     }
     
     #table-attendance-marker .btn-status {
-        width: 24px !important;
-        height: 24px !important;
-        font-size: 10px !important;
-        line-height: 24px !important;
+        width: 22px !important;
+        height: 22px !important;
+        font-size: 9px !important;
+        line-height: 22px !important;
         padding: 0 !important;
-        border-radius: 6px !important;
+        border-radius: 4px !important;
+    }
+    
+    /* Remarks Column */
+    #table-attendance-marker th:nth-child(6),
+    #table-attendance-marker td:nth-child(6) {
+        width: 60px !important;
     }
     
     #table-attendance-marker .table-input-remarks {
-        width: 70px !important;
-        font-size: 10px !important;
-        padding: 3px 6px !important;
-        height: 24px !important;
+        width: 56px !important;
+        font-size: 9px !important;
+        padding: 2px 4px !important;
+        height: 22px !important;
     }
 }
 
