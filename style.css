@@ -1616,62 +1616,100 @@ input:checked + .slider:before {
     #table-class-overview td:nth-of-type(6)::before { content: "Excused"; }
     #table-class-overview td:nth-of-type(7)::before { content: "Performance"; }
     
-    /* Mobile card view for student list directory */
-    #table-students-list, 
-    #table-students-list thead, 
-    #table-students-list tbody, 
-    #table-students-list th, 
-    #table-students-list td, 
-    #table-students-list tr { 
-        display: block; 
+    /* Keep Students List as a compact horizontal table on mobile */
+    #view-students .table-responsive {
+        overflow-x: hidden !important;
     }
     
-    #table-students-list thead tr { 
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
+    #view-students .data-table {
+        font-size: 11px !important;
+        width: 100% !important;
+        table-layout: fixed !important;
     }
     
-    #table-students-list tr { 
-        border: 1px solid var(--border-color);
-        background: rgba(22, 28, 41, 0.4);
-        backdrop-filter: blur(10px);
-        margin-bottom: 16px;
-        border-radius: 16px;
-        padding: 16px;
+    #view-students .data-table th,
+    #view-students .data-table td {
+        padding: 5px 2px !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
-    #table-students-list td { 
-        border: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
-        position: relative;
-        padding: 10px 0;
-        padding-left: 35%; 
-        text-align: left;
-        min-height: 40px;
+    /* ID Column */
+    #view-students .data-table th:nth-child(1),
+    #view-students .data-table td:nth-child(1) {
+        width: 45px !important;
+        font-size: 9px !important;
+    }
+    #view-students .data-table td:nth-child(1) code {
+        font-size: 9px !important;
+        padding: 1px 2px !important;
     }
     
-    #table-students-list td:last-child {
-        border-bottom: none;
+    /* Name Column */
+    #view-students .data-table th:nth-child(2),
+    #view-students .data-table td:nth-child(2) {
+        width: 80px !important;
+        text-align: left !important;
+    }
+    #view-students .data-table td:nth-child(2) strong {
+        display: block !important;
+        max-width: 80px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        font-size: 10px !important;
     }
     
-    #table-students-list td::before { 
-        position: absolute;
-        left: 6px;
-        width: 30%; 
-        padding-right: 10px; 
-        white-space: nowrap;
-        font-weight: 600;
-        color: var(--text-secondary);
+    /* Group Column */
+    #view-students .data-table th:nth-child(3),
+    #view-students .data-table td:nth-child(3) {
+        width: 35px !important;
+        font-size: 10px !important;
     }
     
-    #table-students-list td:nth-of-type(1)::before { content: "ID"; }
-    #table-students-list td:nth-of-type(2)::before { content: "Name"; }
-    #table-students-list td:nth-of-type(3)::before { content: "Group"; }
-    #table-students-list td:nth-of-type(4)::before { content: "Gender"; }
-    #table-students-list td:nth-of-type(5)::before { content: "Contact"; }
-    #table-students-list td:nth-of-type(6)::before { content: "Status"; }
-    #table-students-list td:nth-of-type(7)::before { content: "Actions"; }
+    /* Gender Column */
+    #view-students .data-table th:nth-child(4),
+    #view-students .data-table td:nth-child(4) {
+        width: 35px !important;
+        font-size: 10px !important;
+    }
+    
+    /* Contact Column */
+    #view-students .data-table th:nth-child(5),
+    #view-students .data-table td:nth-child(5) {
+        width: 75px !important;
+        font-size: 9px !important;
+    }
+    
+    /* Status Column */
+    #view-students .data-table th:nth-child(6),
+    #view-students .data-table td:nth-child(6) {
+        width: 45px !important;
+    }
+    #view-students .badge {
+        font-size: 8px !important;
+        padding: 2px 4px !important;
+    }
+    
+    /* Actions Column */
+    #view-students .data-table th:nth-child(7),
+    #view-students .data-table td:nth-child(7) {
+        width: 55px !important;
+    }
+    #view-students .data-table td:nth-child(7) div {
+        gap: 2px !important;
+        justify-content: center !important;
+    }
+    #view-students .btn-action {
+        width: 22px !important;
+        height: 22px !important;
+        font-size: 9px !important;
+        line-height: 22px !important;
+        padding: 0 !important;
+        border-radius: 4px !important;
+    }
     
     /* Report table momentum scrolling */
     .table-scroll-x {
