@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SETEC Attendance System</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN for Interactive Visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=2.1">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <!-- SETEC SVG Logo - Crafted matching the real crest -->
+                <svg class="setec-logo" viewBox="0 0 200 250" width="80" height="100">
+                    <defs>
+                        <clipPath id="clip-left">
+                            <rect x="0" y="0" width="100" height="300" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Shield Base -->
+                    <!-- Left Side (Solid Green) -->
+                    <path d="M 10 10 Q 10 100 100 220 Q 190 100 190 10 Z" fill="#00a859" />
+                    
+                    <!-- Right Side (White Overlay) -->
+                    <path d="M 10 10 Q 10 100 100 220 Q 190 100 190 10 Z" fill="#ffffff" clip-path="url(#clip-left)" />
+                    
+                    <!-- Shield Border Outline -->
+                    <path d="M 10 10 Q 10 100 100 220 Q 190 100 190 10 Z" fill="none" stroke="#00a859" stroke-width="8" />
+                    
+                    <!-- Inner overlapping text/letters representation -->
+                    <!-- S in White on Green (left) -->
+                    <text x="65" y="115" font-family="'Outfit', sans-serif" font-size="75" font-weight="900" fill="#ffffff">S</text>
+                    <!-- E in Green on White (right) -->
+                    <text x="105" y="115" font-family="'Outfit', sans-serif" font-size="75" font-weight="900" fill="#00a859">E</text>
+                    
+                    <!-- Middle Gold Ribbon/Banner representation -->
+                    <path d="M 20 150 Q 100 170 180 150 L 175 185 Q 100 200 25 185 Z" fill="#fcd116" />
+                    <!-- Ribbon text -->
+                    <text x="100" y="176" font-family="'Outfit', sans-serif" font-size="14" font-weight="800" fill="#111520" text-anchor="middle" letter-spacing="1">SETEC</text>
+                </svg>
+                <div class="brand-text">
+                    <h1>SETEC</h1>
+                    <p>Institute</p>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="Dashboard.html" class="nav-item active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="Students.html" class="nav-item">
+                    <i class="fa-solid fa-user-group"></i>
+                    <span>Students</span>
+                </a>
+                <a href="MarkAttendance.html" class="nav-item">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Mark Attendance</span>
+                </a>
+                <a href="MonthlyReport.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Monthly Report</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="theme-switch-container">
+                    <i class="fa-solid fa-moon"></i>
+                    <span>Dark Theme</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <h2 class="page-title" id="page-title">Dashboard</h2>
+                </div>
+                <div class="navbar-right">
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="content-view active-view">
+                <!-- Stats Grid Layout -->
+                <div class="stats-grid">
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-green-glow">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Total Students</h3>
+                            <span class="stat-value text-green" id="stat-total-students">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-cyan-glow">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Present Today</h3>
+                            <span class="stat-value text-cyan" id="stat-present-today">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-red-glow">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Absent Today</h3>
+                            <span class="stat-value text-red" id="stat-absent-today">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-yellow-glow">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Late Today</h3>
+                            <span class="stat-value text-yellow" id="stat-late-today">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon bg-cyan-glow">
+                            <i class="fa-solid fa-envelope-open-text"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Excused Today</h3>
+                            <span class="stat-value text-cyan" id="stat-excused-today">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card accent-card">
+                        <div class="stat-icon bg-purple-glow">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Attendance Rate</h3>
+                            <span class="stat-value text-glow" id="stat-attendance-rate">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Grid (Charts and Tables) -->
+                <div class="dashboard-grid">
+                    <!-- Left: Today's Status & Weekly Trend -->
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div class="glass-card">
+                            <h3>Today's Attendance Status</h3>
+                            <div class="chart-container" style="margin-top: 16px;">
+                                <canvas id="today-attendance-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="glass-card">
+                            <h3>Weekly Attendance Trend</h3>
+                            <div class="chart-container" style="margin-top: 16px;">
+                                <canvas id="weekly-trend-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Group Performance Summary -->
+                    <div class="glass-card" style="display: flex; flex-direction: column;">
+                        <h3>Group Performance Summary</h3>
+                        <p class="text-muted text-sm">Attendance breakdown by Group for today</p>
+                        <div class="table-responsive" style="margin-top: 16px; flex-grow: 1;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Group</th>
+                                        <th>Total</th>
+                                        <th class="text-green">Present</th>
+                                        <th class="text-red">Absent</th>
+                                        <th class="text-yellow">Late</th>
+                                        <th class="text-cyan">Excused</th>
+                                        <th>Performance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-class-overview">
+                                    <!-- Loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Mac OS Bottom Dock Navigation Menu (Mobile Only) -->
+    <div class="mac-dock-container">
+        <div class="mac-dock">
+            <a href="Dashboard.html" class="dock-item active" id="dock-nav-dashboard" data-view="dashboard" title="Dashboard">
+                <i class="fa-solid fa-house"></i>
+                <span class="dock-dot"></span>
+            </a>
+            <a href="Students.html" class="dock-item" id="dock-nav-students" data-view="students" title="Students">
+                <i class="fa-solid fa-user-group"></i>
+                <span class="dock-dot"></span>
+            </a>
+            <a href="MarkAttendance.html" class="dock-item" id="dock-nav-attendance" data-view="attendance" title="Attendance">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span class="dock-dot"></span>
+            </a>
+            <a href="MonthlyReport.html" class="dock-item" id="dock-nav-reports" data-view="reports" title="Reports">
+                <i class="fa-solid fa-chart-line"></i>
+                <span class="dock-dot"></span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Confirmation Toast / Popup Alert Notification -->
+    <div id="toast-notification" class="toast">
+        <div class="toast-content">
+            <i class="fa-solid fa-circle-check toast-icon"></i>
+            <span class="toast-message" id="toast-message">Action successful!</span>
+        </div>
+    </div>
+
+    <!-- Script File -->
+    <script src="script.js?v=2.1"></script>
+</body>
+</html>

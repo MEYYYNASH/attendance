@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Directory - SETEC Attendance System</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN for Interactive Visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=2.1">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <!-- SETEC SVG Logo - Crafted matching the real crest -->
+                <svg class="setec-logo" viewBox="0 0 200 250" width="80" height="100">
+                    <defs>
+                        <clipPath id="clip-left">
+                            <rect x="0" y="0" width="100" height="300" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Shield Base -->
+                    <!-- Left Side (Solid Green) -->
+                    <path d="M 10 10 Q 10 100 100 220 Q 190 100 190 10 Z" fill="#00a859" />
+                    
+                    <!-- Right Side (White Overlay) -->
+                    <path d="M 10 10 Q 10 100 100 220 Q 190 100 190 10 Z" fill="#ffffff" clip-path="url(#clip-left)" />
+                    
+                    <!-- Shield Border Outline -->
+                    <path d="M 10 10 Q 10 100 100 220 Q 190 100 190 10 Z" fill="none" stroke="#00a859" stroke-width="8" />
+                    
+                    <!-- Inner overlapping text/letters representation -->
+                    <!-- S in White on Green (left) -->
+                    <text x="65" y="115" font-family="'Outfit', sans-serif" font-size="75" font-weight="900" fill="#ffffff">S</text>
+                    <!-- E in Green on White (right) -->
+                    <text x="105" y="115" font-family="'Outfit', sans-serif" font-size="75" font-weight="900" fill="#00a859">E</text>
+                    
+                    <!-- Middle Gold Ribbon/Banner representation -->
+                    <path d="M 20 150 Q 100 170 180 150 L 175 185 Q 100 200 25 185 Z" fill="#fcd116" />
+                    <!-- Ribbon text -->
+                    <text x="100" y="176" font-family="'Outfit', sans-serif" font-size="14" font-weight="800" fill="#111520" text-anchor="middle" letter-spacing="1">SETEC</text>
+                </svg>
+                <div class="brand-text">
+                    <h1>SETEC</h1>
+                    <p>Institute</p>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="Dashboard.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="Students.html" class="nav-item active">
+                    <i class="fa-solid fa-user-group"></i>
+                    <span>Students</span>
+                </a>
+                <a href="MarkAttendance.html" class="nav-item">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Mark Attendance</span>
+                </a>
+                <a href="MonthlyReport.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Monthly Report</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="theme-switch-container">
+                    <i class="fa-solid fa-moon"></i>
+                    <span>Dark Theme</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <h2 class="page-title" id="page-title">Students</h2>
+                </div>
+                <div class="navbar-right">
+                </div>
+            </header>
+
+            <!-- Students List View -->
+            <section id="view-students" class="content-view active-view">
+                <!-- Directory Controls -->
+                <div class="table-controls glass-card">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="student-search-input" placeholder="Search student by name or ID...">
+                    </div>
+                    <div class="filter-group">
+                        <select id="student-class-filter" class="glass-select">
+                            <option value="all">All Groups</option>
+                        </select>
+                        <button class="btn btn-primary" id="btn-add-student">
+                            <i class="fa-solid fa-user-plus"></i> Add Student
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Data Grid Table -->
+                <div class="glass-card">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Full Name</th>
+                                    <th>Group</th>
+                                    <th>Gender</th>
+                                    <th>Contact No</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-students-list">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="table-pagination">
+                        <span class="pagination-info" id="pagination-info">Showing 0 to 0 of 0 students</span>
+                        <div class="pagination-buttons">
+                            <button class="btn btn-sm btn-secondary" id="btn-prev-page" disabled>
+                                <i class="fa-solid fa-chevron-left"></i> Prev
+                            </button>
+                            <button class="btn btn-sm btn-secondary" id="btn-next-page" disabled>
+                                Next <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add/Edit Student Modal -->
+    <div class="modal" id="student-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Student</h3>
+                <button class="modal-close" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="student-form">
+                <div class="modal-body">
+                    <input type="hidden" id="student-action" value="add">
+                    <div class="form-group">
+                        <label for="student-id-input">Student ID</label>
+                        <input type="text" id="student-id-input" placeholder="e.g. STU1005" required>
+                        <small class="form-text text-muted">Unique identifier code (e.g. STU1001)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-name-input">Full Name</label>
+                        <input type="text" id="student-name-input" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group flex-sm-1">
+                            <label for="student-class-input">Group</label>
+                            <input type="text" id="student-class-input" list="classes-datalist" placeholder="e.g. SW40" required>
+                            <datalist id="classes-datalist">
+                                <option value="SW40">SW40</option>
+                            </datalist>
+                        </div>
+                        <div class="form-group flex-sm-1">
+                            <label for="student-gender-input">Gender</label>
+                            <select id="student-gender-input" class="glass-select" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-contact-input">Contact Number</label>
+                        <input type="text" id="student-contact-input" placeholder="e.g. +855 12 345 678">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-student">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mac OS Bottom Dock Navigation Menu (Mobile Only) -->
+    <div class="mac-dock-container">
+        <div class="mac-dock">
+            <a href="Dashboard.html" class="dock-item" id="dock-nav-dashboard" data-view="dashboard" title="Dashboard">
+                <i class="fa-solid fa-house"></i>
+                <span class="dock-dot"></span>
+            </a>
+            <a href="Students.html" class="dock-item active" id="dock-nav-students" data-view="students" title="Students">
+                <i class="fa-solid fa-user-group"></i>
+                <span class="dock-dot"></span>
+            </a>
+            <a href="MarkAttendance.html" class="dock-item" id="dock-nav-attendance" data-view="attendance" title="Attendance">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span class="dock-dot"></span>
+            </a>
+            <a href="MonthlyReport.html" class="dock-item" id="dock-nav-reports" data-view="reports" title="Reports">
+                <i class="fa-solid fa-chart-line"></i>
+                <span class="dock-dot"></span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Confirmation Toast / Popup Alert Notification -->
+    <div id="toast-notification" class="toast">
+        <div class="toast-content">
+            <i class="fa-solid fa-circle-check toast-icon"></i>
+            <span class="toast-message" id="toast-message">Action successful!</span>
+        </div>
+    </div>
+
+    <!-- Script File -->
+    <script src="script.js?v=2.1"></script>
+</body>
+</html>
