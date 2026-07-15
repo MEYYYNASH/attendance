@@ -1693,12 +1693,10 @@ input:checked + .slider:before {
     transform: translateX(-50%);
     z-index: 1000;
     justify-content: center;
-    width: auto;
-    pointer-events: none;
+    width: max-content;
 }
 
 .mac-dock {
-    pointer-events: auto;
     background: rgba(20, 20, 30, 0.4) !important;
     backdrop-filter: blur(24px) !important;
     -webkit-backdrop-filter: blur(24px) !important;
