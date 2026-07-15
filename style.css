@@ -636,6 +636,11 @@ body.light-theme .icon-dark-theme {
     background: linear-gradient(135deg, rgba(0, 168, 89, 0.05), rgba(22, 28, 41, 0.55));
 }
 
+.light-theme .accent-card {
+    border-color: rgba(0, 168, 89, 0.2) !important;
+    background: linear-gradient(135deg, rgba(0, 168, 89, 0.08), rgba(255, 255, 255, 0.75)) !important;
+}
+
 .stat-details h3 {
     font-size: 12px;
     font-weight: 500;
